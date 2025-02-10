@@ -1,5 +1,5 @@
 // 2nd Assignment: Using Inheritance and Polymorphism
-
+import java.util.Scanner;
 class Basic {
     protected double r;
     int l, b,side;
@@ -10,12 +10,7 @@ class Basic {
         this.l = len;
         this.b = bre;
     }
-
-    void setRadius(double rad) {
-        this.r = rad;
-    }
 }
-
 
 class Circle extends Basic {
     
@@ -34,6 +29,7 @@ class Circle extends Basic {
 class Rectangle extends Basic {
     Rectangle(int le, int br) {
         super(le, br);
+        
     }
 
    
@@ -59,16 +55,59 @@ class Square extends Basic
 
 public class Assignment_2 {
     public static void main(String[] args) {
-      
-        Rectangle r = new Rectangle(2, 3);
-        r.area();
-
-      
-        Circle c = new Circle(4.5);
-        c.area();
-        
-        Square s=new Square(4);
-        s.area();
+       Scanner sc=new Scanner(System.in);
+        int ch,ln,bd,rd,sd;
+        do{
+         System.out.print("Find the Area of 1.Rectangle\t2.Circle\t3.Square\t4.Exit\nEnter choice:");
+         ch=sc.nextInt();
+         switch(ch)
+         {
+           case 1://for rectangle
+           	  System.out.print("Enter the length:");
+           	  ln=sc.nextInt();
+           	  while(ln<0)
+           	  {
+           	   System.out.println("Length should NOT be negative !");
+           	   ln=sc.nextInt();
+           	  }
+           	  System.out.print("Enter the breadth:");
+           	  bd=sc.nextInt();
+           	  while(bd<0)
+           	  {
+           	   System.out.print("Breadth should NOT be negative !");
+           	   bd=sc.nextInt();
+           	  }
+           	  Rectangle r=new Rectangle(ln,bd);
+           	  r.area();
+           	  break;
+           case 2://circle
+           	  System.out.print("Enter the radius:");
+           	  rd=sc.nextInt();
+           	  while(rd<0)
+           	  {
+           	   System.out.println("Radius should NOT be negative !");
+           	   rd=sc.nextInt();
+           	  }
+           	  Circle c=new Circle(rd);
+           	  c.area();
+           	  break;
+           case 3://square
+           	  System.out.print("Enter the side:");
+           	  sd=sc.nextInt();
+           	  while(sd<0)
+           	  {
+           	   System.out.println("Side should NOT be negative !");
+           	   sd=sc.nextInt();
+           	  }
+           	  Square s=new Square(sd);
+           	  s.area();
+           	  break;
+           case 4://exit
+           
+         }
+         
+        }while(ch!=4);
     }
 }
+
 
