@@ -29,7 +29,7 @@ class Bank {
     }
 }
 
-public class Many {
+public class Assignment_1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Bank[] b = new Bank[10]; // Array to hold up to 10 Bank objects
