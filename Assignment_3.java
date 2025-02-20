@@ -106,16 +106,15 @@ public class Assignment_3{
             res=ba.div(x,y);
             di.show(res);
             break;
-    case 5://exponential      
+    case 5://exponential     
+            advance ad=new Operation(); 
             System.out.print("\nEnter number : ");
             x=sc.nextInt();
             System.out.print("\nEnter power : ");
             y=sc.nextInt(); 
-            res=ba.power(x,y);
+            res=ad.power(x,y);
             di.show(res);
             break;
-    
-            
     }
    }while(ch!=6);
    
