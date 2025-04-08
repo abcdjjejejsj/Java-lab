@@ -1,70 +1,91 @@
 import java.util.Scanner;
 
+// TicketBooking implements Runnable
 class TicketBooking implements Runnable {
-    int tickets;  
-    String counterName; 
+    int tickets;
 
-    TicketBooking(int tickets, String name) {
+    TicketBooking(int tickets) {
         this.tickets = tickets;
-        this.counterName = name;
     }
 
-    public void run() {
-        while (tickets > 0) {
-            bookTicket();
+    // synchronized method for safe booking
+    synchronized public void bookTicket(String counterName) {
+        if (tickets > 0) {
+            System.out.println(counterName + " booked 1 ticket. Remaining: " + (--tickets));
             try {
-                Thread.sleep(1000); 
-            } catch (InterruptedException e) {
+                Thread.sleep(500);
+            } catch (Exception e) {
                 System.out.println(e);
             }
+        } else {
+            System.out.println(counterName + " -> No tickets left!");
         }
     }
 
-    synchronized void bookTicket() {
-        if (tickets > 0) {
-            System.out.println(counterName + " booked ticket no: " + tickets);
-            tickets--;
-        } else {
-            System.out.println(counterName + " : No tickets left");
+    @Override
+    public void run() {
+        // blank because booking will be done by Counter class
+    }
+}
+
+// Counter class extends Thread
+class Counter extends Thread {
+    TicketBooking bookingSystem;
+    String counterName;
+
+    Counter(TicketBooking bookingSystem, String counterName) {
+        this.bookingSystem = bookingSystem;
+        this.counterName = counterName;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (bookingSystem) {
+                if (bookingSystem.tickets <= 0)
+                    break;
+                bookingSystem.bookTicket(counterName);
+            }
         }
     }
 }
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
-
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter total no of tickets: ");
+        System.out.println("Enter total number of tickets:");
         int totalTickets = sc.nextInt();
 
-        System.out.print("Enter no of Counters: ");
-        int noOfCounters = sc.nextInt();
+        System.out.println("Enter number of counters:");
+        int n = sc.nextInt();
 
-        Thread counters[] = new Thread[noOfCounters];
+        sc.nextLine(); // clear buffer
 
-        // creating threads dynamically
-        for(int i=0; i<noOfCounters; i++) {
-            System.out.print("Enter name of Counter " + (i+1) + ": ");
-            String name = sc.next();
+        TicketBooking bookingSystem = new TicketBooking(totalTickets);
 
-            TicketBooking booking = new TicketBooking(totalTickets, name);
-            counters[i] = new Thread(booking);
+        Counter[] counters = new Counter[n];
 
-            // priority concept
-            counters[i].setPriority(Thread.NORM_PRIORITY); 
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter name of Counter " + (i + 1) + ":");
+            String name = sc.nextLine();
+            counters[i] = new Counter(bookingSystem, name);
         }
 
-        // starting threads
-        for(int i=0; i<noOfCounters; i++) {
+        System.out.println("\nBooking Started...\n");
+
+        for (int i = 0; i < n; i++) {
             counters[i].start();
         }
 
-        // join all threads
-        for(int i=0; i<noOfCounters; i++) {
-            counters[i].join();
+        for (int i = 0; i < n; i++) {
+            try {
+                counters[i].join();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
-        System.out.println("All Tickets Booked Successfully");
+        System.out.println("\nBooking Closed.");
     }
 }
