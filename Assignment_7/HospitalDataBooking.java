@@ -129,12 +129,10 @@ public class HospitalDataBooking extends Applet implements ActionListener, ItemL
       String phone = this.phoneField.getText();
       String symptoms = this.symptomsField.getText();
 
-      if (this.selectedDepartment.equals("Select Department")) {
-         this.selectedDepartment = "Not Selected";
-      }
-
-      if (this.selectedAppointmentTime.equals("Select Time")) {
-         this.selectedAppointmentTime = "Not Selected";
+      if (name.isEmpty() || age.isEmpty() || phone.isEmpty() || symptoms.isEmpty() || 
+          this.selectedDepartment.equals("Select Department") || this.selectedAppointmentTime.equals("Select Time")) {
+         showErrorDialog("All fields are required. Please fill in all fields.");
+         return;
       }
 
       Dialog dialog = new Dialog((Frame)null, "Appointment Details", true);
@@ -153,6 +151,18 @@ public class HospitalDataBooking extends Applet implements ActionListener, ItemL
       dialog.add(okButton);
       dialog.setLocation(300, 300);
       dialog.setVisible(true);
+   }
+
+   private void showErrorDialog(String message) {
+      Dialog errorDialog = new Dialog((Frame)null, "Input Error", true);
+      errorDialog.setLayout(new GridLayout(2, 1));
+      errorDialog.setSize(300, 150);
+      errorDialog.add(new Label(message));
+      Button okButton = new Button("OK");
+      okButton.addActionListener((e) -> errorDialog.setVisible(false));
+      errorDialog.add(okButton);
+      errorDialog.setLocation(350, 350);
+      errorDialog.setVisible(true);
    }
 
    private void clearForm() {
